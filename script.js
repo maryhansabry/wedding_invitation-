@@ -127,7 +127,7 @@ for (let i = 0; i < 8; i++) createPetal();
 
 // !! EDIT THIS if the date changes !!
 // October 11, 2025 at 6:00 PM Egypt time (UTC+2)
-const WEDDING_DATE = new Date("October 11, 2025 18:00:00");
+const WEDDING_DATE = new Date("October 11, 2026 18:00:00");
 
 const elDays  = document.getElementById('cd-days');
 const elHours = document.getElementById('cd-hours');
