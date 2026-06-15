@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+  <title>Kloug & Mariam — October 11</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ====================================================
+    ENVELOPE INTRO — shows first, tap to open
+    The floral seal on cream envelope, tap reveals invitation
+    Background photo (couple) shows through blurred behind envelope
+  ==================================================== -->
+  <div class="envelope-screen" id="envelopeScreen">
+
+    <!-- Couple photo blurred in background -->
+    <!-- !! BACKGROUND IMAGE — couple.jpg is the photo you uploaded !! -->
+    <div class="env-bg" style="background-image: url('couple.jpg')"></div>
+    <div class="env-bg-overlay"></div>
+
+    <!-- Floating petals behind envelope -->
+    <div class="petal-field" aria-hidden="true" id="petalField"></div>
+
+    <!-- The envelope itself -->
+    <div class="envelope-wrap" id="envelopeWrap">
+
+      <!-- Envelope body (cream card) -->
+      <div class="envelope-card">
+
+        <!-- Flap that opens upward when tapped -->
+        <div class="envelope-flap" id="envelopeFlap">
+          <!-- Wax seal on the flap -->
+          <div class="wax-seal">
+            <!-- SVG rose seal — similar to the image you shared -->
+            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="54" fill="#a8c4a0" opacity="0.9"/>
+              <circle cx="60" cy="60" r="50" fill="#b8d4b0" opacity="0.5"/>
+              <!-- Rose petals -->
+              <g transform="translate(60,60)">
+                <ellipse rx="16" ry="9" transform="rotate(0)"   fill="#f0d8d0" opacity="0.9"/>
+                <ellipse rx="16" ry="9" transform="rotate(45)"  fill="#e8c8c0" opacity="0.8"/>
+                <ellipse rx="16" ry="9" transform="rotate(90)"  fill="#f0d8d0" opacity="0.9"/>
+                <ellipse rx="16" ry="9" transform="rotate(135)" fill="#e8c8c0" opacity="0.8"/>
+                <ellipse rx="10" ry="6" transform="rotate(22)"  fill="#d8b8b0" opacity="0.9"/>
+                <ellipse rx="10" ry="6" transform="rotate(67)"  fill="#d8b8b0" opacity="0.9"/>
+                <circle r="5" fill="#c8a098" opacity="0.95"/>
+              </g>
+              <!-- Small leaf accents -->
+              <ellipse cx="34" cy="72" rx="10" ry="4" transform="rotate(-40,34,72)" fill="#7a9878" opacity="0.7"/>
+              <ellipse cx="86" cy="72" rx="10" ry="4" transform="rotate(40,86,72)"  fill="#7a9878" opacity="0.7"/>
+              <ellipse cx="60" cy="88" rx="10" ry="4" transform="rotate(0,60,88)"   fill="#7a9878" opacity="0.7"/>
+              <!-- Small flower dots -->
+              <circle cx="44" cy="44" r="3" fill="#f0d0d8" opacity="0.8"/>
+              <circle cx="76" cy="44" r="3" fill="#f0d0d8" opacity="0.8"/>
+              <circle cx="44" cy="76" r="2.5" fill="#f0d0d8" opacity="0.7"/>
+              <circle cx="76" cy="76" r="2.5" fill="#f0d0d8" opacity="0.7"/>
+            </svg>
+          </div>
+        </div>
+        <!-- END FLAP -->
+
+        <!-- Envelope front — shows K & M monogram -->
+        <div class="envelope-front">
+          <p class="env-to">You are cordially invited</p>
+          <p class="env-monogram">K <span>&amp;</span> M</p>
+          <p class="env-tap">✦ tap to open ✦</p>
+        </div>
+
+      </div>
+      <!-- END envelope-card -->
+
+      <!-- Letter that slides up out of envelope after flap opens -->
+      <div class="envelope-letter" id="envelopeLetter">
+        <p class="letter-preview-text">October 11, 2025</p>
+      </div>
+
+    </div>
+    <!-- END envelope-wrap -->
+
+  </div>
+  <!-- END ENVELOPE SCREEN -->
+
+
+  <!-- ====================================================
+    MAIN INVITATION — hidden until envelope is opened
+  ==================================================== -->
+  <main class="invitation" id="invitation" aria-hidden="true">
+
+    <!-- ====================================================
+      SECTION 1 — HERO
+      Animated floral + names, with couple photo faintly in background
+    ==================================================== -->
+    <section class="hero">
+
+      <!-- Couple photo — very faint watermark behind everything -->
+      <!-- !! To remove this background photo: delete the div below !! -->
+      <div class="hero-photo-bg" style="background-image: url('couple.jpg')" aria-hidden="true"></div>
+
+      <!-- Top floral SVG -->
+      <div class="floral-top" aria-hidden="true">
+        <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" class="floral-svg">
+          <g class="floral-group center-bloom" transform="translate(400,210)">
+            <ellipse rx="48" ry="28" transform="rotate(0)"   fill="#e8b4b8" opacity="0.85"/>
+            <ellipse rx="48" ry="28" transform="rotate(45)"  fill="#d4929a" opacity="0.75"/>
+            <ellipse rx="48" ry="28" transform="rotate(90)"  fill="#e8b4b8" opacity="0.85"/>
+            <ellipse rx="48" ry="28" transform="rotate(135)" fill="#d4929a" opacity="0.75"/>
+            <ellipse rx="28" ry="16" transform="rotate(22)"  fill="#c47a84" opacity="0.9"/>
+            <ellipse rx="28" ry="16" transform="rotate(67)"  fill="#c47a84" opacity="0.9"/>
+            <circle r="10" fill="#a85a66" opacity="0.95"/>
+          </g>
+          <g class="floral-group left-bloom" transform="translate(170,180)">
+            <ellipse rx="35" ry="20" transform="rotate(20)"  fill="#e8c4c8" opacity="0.8"/>
+            <ellipse rx="35" ry="20" transform="rotate(80)"  fill="#d8a4a8" opacity="0.7"/>
+            <ellipse rx="35" ry="20" transform="rotate(140)" fill="#e8c4c8" opacity="0.8"/>
+            <ellipse rx="20" ry="12" transform="rotate(50)"  fill="#c49498" opacity="0.9"/>
+            <circle r="7" fill="#b07478" opacity="0.95"/>
+          </g>
+          <g class="floral-group right-bloom" transform="translate(630,185)">
+            <ellipse rx="38" ry="22" transform="rotate(-20)" fill="#e8b4c4" opacity="0.8"/>
+            <ellipse rx="38" ry="22" transform="rotate(40)"  fill="#d89ab0" opacity="0.7"/>
+            <ellipse rx="38" ry="22" transform="rotate(100)" fill="#e8b4c4" opacity="0.8"/>
+            <ellipse rx="22" ry="13" transform="rotate(70)"  fill="#c47a9a" opacity="0.9"/>
+            <circle r="8" fill="#b06080" opacity="0.95"/>
+          </g>
+          <g class="floral-group bud-left" transform="translate(60,220)">
+            <ellipse rx="22" ry="13" transform="rotate(10)"  fill="#ecc8cc" opacity="0.75"/>
+            <ellipse rx="22" ry="13" transform="rotate(70)"  fill="#dca8b0" opacity="0.65"/>
+            <circle r="5" fill="#c08890" opacity="0.9"/>
+          </g>
+          <g class="floral-group bud-right" transform="translate(740,215)">
+            <ellipse rx="22" ry="13" transform="rotate(-10)" fill="#ecc8dc" opacity="0.75"/>
+            <ellipse rx="22" ry="13" transform="rotate(50)"  fill="#dca8c4" opacity="0.65"/>
+            <circle r="5" fill="#c08898" opacity="0.9"/>
+          </g>
+          <!-- Leaves -->
+          <ellipse cx="105" cy="245" rx="32" ry="10" transform="rotate(-35,105,245)" fill="#8aaa88" opacity="0.6"/>
+          <ellipse cx="130" cy="195" rx="28" ry="8"  transform="rotate(-55,130,195)" fill="#9ab898" opacity="0.55"/>
+          <ellipse cx="220" cy="150" rx="36" ry="10" transform="rotate(-70,220,150)" fill="#7a9878" opacity="0.6"/>
+          <ellipse cx="270" cy="240" rx="26" ry="8"  transform="rotate(20,270,240)"  fill="#8aaa88" opacity="0.5"/>
+          <ellipse cx="310" cy="170" rx="30" ry="9"  transform="rotate(-40,310,170)" fill="#9ab898" opacity="0.55"/>
+          <ellipse cx="490" cy="165" rx="30" ry="9"  transform="rotate(40,490,165)"  fill="#8aaa88" opacity="0.55"/>
+          <ellipse cx="540" cy="245" rx="28" ry="8"  transform="rotate(-20,540,245)" fill="#9ab898" opacity="0.5"/>
+          <ellipse cx="585" cy="155" rx="34" ry="10" transform="rotate(65,585,155)"  fill="#7a9878" opacity="0.6"/>
+          <ellipse cx="665" cy="245" rx="28" ry="8"  transform="rotate(30,665,245)"  fill="#8aaa88" opacity="0.55"/>
+          <ellipse cx="700" cy="190" rx="26" ry="8"  transform="rotate(50,700,190)"  fill="#9ab898" opacity="0.5"/>
+          <ellipse cx="755" cy="245" rx="22" ry="7"  transform="rotate(-40,755,245)" fill="#7a9878" opacity="0.55"/>
+          <!-- Accent dots -->
+          <circle cx="340" cy="145" r="5" fill="#f0c8cc" opacity="0.8"/>
+          <circle cx="355" cy="270" r="4" fill="#e0b4bc" opacity="0.7"/>
+          <circle cx="455" cy="140" r="5" fill="#f0c8d8" opacity="0.8"/>
+          <circle cx="445" cy="272" r="4" fill="#e0b4c8" opacity="0.7"/>
+          <circle cx="200" cy="270" r="6" fill="#dca4ac" opacity="0.6"/>
+          <circle cx="600" cy="265" r="6" fill="#dca4b8" opacity="0.6"/>
+          <!-- Stems -->
+          <line x1="400" y1="258" x2="310" y2="310" stroke="#8aaa88" stroke-width="1.5" opacity="0.5"/>
+          <line x1="400" y1="258" x2="490" y2="308" stroke="#8aaa88" stroke-width="1.5" opacity="0.5"/>
+          <line x1="170" y1="200" x2="105" y2="248" stroke="#8aaa88" stroke-width="1.2" opacity="0.45"/>
+          <line x1="630" y1="207" x2="695" y2="250" stroke="#8aaa88" stroke-width="1.2" opacity="0.45"/>
+        </svg>
+      </div>
+
+      <!-- Hero text -->
+      <div class="hero-text">
+        <p class="eyebrow">Together with their families</p>
+        <!-- !! NAMES — edit here !! -->
+        <h1 class="names">
+          <span class="name-left">Kloug</span>
+          <span class="ampersand">&amp;</span>
+          <span class="name-right">Mariam</span>
+        </h1>
+        <div class="divider-line" aria-hidden="true"></div>
+        <p class="invite-phrase">joyfully invite you to celebrate their marriage</p>
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================
+      SECTION 2 — DATE, TIME & VENUE CARDS
+      Edit: date, time, church name below
+    ==================================================== -->
+    <section class="details">
+
+      <!-- DATE -->
+      <div class="detail-card" data-animate="fade-up">
+        <span class="detail-icon">✦</span>
+        <p class="detail-label">Date</p>
+        <!-- !! DATE — edit here !! -->
+        <p class="detail-value large">October 11</p>
+        <p class="detail-sub">Saturday, 2025</p>
+      </div>
+
+      <!-- TIME -->
+      <div class="detail-card" data-animate="fade-up" style="--delay:0.15s">
+        <span class="detail-icon">✦</span>
+        <p class="detail-label">Time</p>
+        <!-- !! TIME — edit here !! -->
+        <p class="detail-value large">6:00 PM</p>
+        <p class="detail-sub">Ceremony begins promptly</p>
+      </div>
+
+      <!-- VENUE with cross icon — church! -->
+      <div class="detail-card" data-animate="fade-up" style="--delay:0.3s">
+        <!-- Cross symbol for church -->
+        <span class="detail-icon cross" aria-label="Church">✝</span>
+        <p class="detail-label">Church</p>
+        <!-- !! CHURCH NAME — edit here !! -->
+        <p class="detail-value">St. Shenouda Church</p>
+        <p class="detail-sub">El Qabbari, Alexandria</p>
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================
+      SECTION 3 — BIBLE VERSE
+      Edit: verse text and reference
+      3 other verse options are commented below
+    ==================================================== -->
+    <section class="verse-section" data-animate="fade-up">
+      <div class="verse-wrap">
+        <span class="quote-mark open">"</span>
+        <!--
+          OTHER VERSE OPTIONS — uncomment the one you want:
+
+          OPTION B — Ruth 1:16:
+          <blockquote class="verse-text">
+            Where you go I will go, and where you stay I will stay.
+            Your people will be my people and your God my God.
+          </blockquote>
+          <cite class="verse-ref">Ruth 1:16</cite>
+
+          OPTION C — Ecclesiastes 4:9-12:
+          <blockquote class="verse-text">
+            Two are better than one, because they have a good return for their labor.
+            A cord of three strands is not quickly broken.
+          </blockquote>
+          <cite class="verse-ref">Ecclesiastes 4:9–12</cite>
+
+          OPTION D — Genesis 2:24:
+          <blockquote class="verse-text">
+            That is why a man leaves his father and mother and is united to his wife,
+            and they become one flesh.
+          </blockquote>
+          <cite class="verse-ref">Genesis 2:24</cite>
+        -->
+        <!-- !! CURRENT VERSE — edit here !! -->
+        <blockquote class="verse-text">
+          Love is patient, love is kind. It does not envy, it does not boast,
+          it is not proud. It always protects, always trusts,
+          always hopes, always perseveres.
+          Love never fails.
+        </blockquote>
+        <cite class="verse-ref">1 Corinthians 13:4–8</cite>
+        <span class="quote-mark close">"</span>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+      SECTION 4 — LOCATION
+      Church photo placeholder + map button + animated map pin
+      !! To add church photo: replace the placeholder div with:
+         <img src="church.jpg" alt="Church" class="church-photo" />
+         (name your file church.jpg and put it in the same folder)
+    ==================================================== -->
+    <section class="location-section" data-animate="fade-up">
+
+      <!-- !! SECTION TITLE !! -->
+      <p class="location-section-title">Details of the Day</p>
+      <p class="location-section-sub">Everything you need to know about our special day</p>
+
+      <p class="location-label">Location</p>
+
+      <!-- CHURCH PHOTO — real photo from upload -->
+      <img src="church.jpg" alt="كنيسة الانبا شنودة بالقباري" class="church-photo" />
+
+      <!-- Church name in elegant display -->
+      <p class="church-name-display">
+        Church of Pope Shenouda III<br/>
+        <span class="church-name-sub">& His Disciple Anba Wissa · El Qabbari, Alexandria</span>
+      </p>
+
+      <!-- Animated map pin -->
+      <div class="map-pin-anim" aria-hidden="true">
+        <span class="map-pin-dot">📍</span>
+      </div>
+
+      <!-- Date & time info row -->
+      <div class="location-info-row">
+        <span>📅 Saturday, October 11, 2025</span>
+        <span>🕕 From 6:00 PM</span>
+      </div>
+
+      <!-- Buttons row -->
+      <div class="location-btns">
+        <!-- !! MAP LINK !! -->
+        <a
+          href="https://maps.app.goo.gl/HHDkMDhQF83MSAF86"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="map-btn"
+        >
+          📍 How to get there
+        </a>
+
+        <!-- Add to Calendar -->
+        <!-- !! Edit the calendar link dates/text if needed !! -->
+        <a
+          href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding+of+Kloug+%26+Mariam&dates=20251011T180000/20251011T210000&details=Join+us+to+celebrate+the+wedding+of+Kloug+%26+Mariam!&location=Church+of+Pope+Shenouda+III,+El+Qabbari,+Alexandria&sf=true&output=xml"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="map-btn calendar-btn"
+        >
+          🗓 Add to Calendar
+        </a>
+      </div>
+
+      <p class="location-address">
+        كنيسة الانبا شنودة رئيس المتوحدين وتلميذه الانبا ويصا<br/>
+        القباري · الإسكندرية
+      </p>
+
+    </section>
+
+
+    <!-- ====================================================
+      SECTION 5 — COUNTDOWN TIMER
+      !! IMPORTANT: also update WEDDING_DATE in script.js !!
+    ==================================================== -->
+    <section class="countdown-section" data-animate="fade-up">
+      <p class="countdown-label">Countdown</p>
+      <p class="countdown-sublabel">Until we say <em>"I do"</em></p>
+      <div class="countdown-wrap" id="countdown">
+        <div class="count-unit">
+          <span class="count-num" id="cd-days">--</span>
+          <span class="count-name">Days</span>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-unit">
+          <span class="count-num" id="cd-hours">--</span>
+          <span class="count-name">Hours</span>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-unit">
+          <span class="count-num" id="cd-mins">--</span>
+          <span class="count-name">Minutes</span>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-unit">
+          <span class="count-num" id="cd-secs">--</span>
+          <span class="count-name">Seconds</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+      BOTTOM FLORAL — mirrors top, flipped
+    ==================================================== -->
+    <div class="floral-bottom" aria-hidden="true">
+      <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" class="floral-svg">
+        <g class="floral-group center-bloom" transform="translate(400,210)">
+          <ellipse rx="48" ry="28" transform="rotate(0)"   fill="#e8b4b8" opacity="0.85"/>
+          <ellipse rx="48" ry="28" transform="rotate(45)"  fill="#d4929a" opacity="0.75"/>
+          <ellipse rx="48" ry="28" transform="rotate(90)"  fill="#e8b4b8" opacity="0.85"/>
+          <ellipse rx="48" ry="28" transform="rotate(135)" fill="#d4929a" opacity="0.75"/>
+          <ellipse rx="28" ry="16" transform="rotate(22)"  fill="#c47a84" opacity="0.9"/>
+          <ellipse rx="28" ry="16" transform="rotate(67)"  fill="#c47a84" opacity="0.9"/>
+          <circle r="10" fill="#a85a66" opacity="0.95"/>
+        </g>
+        <g class="floral-group left-bloom" transform="translate(170,180)">
+          <ellipse rx="35" ry="20" transform="rotate(20)"  fill="#e8c4c8" opacity="0.8"/>
+          <ellipse rx="35" ry="20" transform="rotate(80)"  fill="#d8a4a8" opacity="0.7"/>
+          <ellipse rx="35" ry="20" transform="rotate(140)" fill="#e8c4c8" opacity="0.8"/>
+          <ellipse rx="20" ry="12" transform="rotate(50)"  fill="#c49498" opacity="0.9"/>
+          <circle r="7" fill="#b07478" opacity="0.95"/>
+        </g>
+        <g class="floral-group right-bloom" transform="translate(630,185)">
+          <ellipse rx="38" ry="22" transform="rotate(-20)" fill="#e8b4c4" opacity="0.8"/>
+          <ellipse rx="38" ry="22" transform="rotate(40)"  fill="#d89ab0" opacity="0.7"/>
+          <ellipse rx="38" ry="22" transform="rotate(100)" fill="#e8b4c4" opacity="0.8"/>
+          <ellipse rx="22" ry="13" transform="rotate(70)"  fill="#c47a9a" opacity="0.9"/>
+          <circle r="8" fill="#b06080" opacity="0.95"/>
+        </g>
+        <g class="floral-group bud-left" transform="translate(60,220)">
+          <ellipse rx="22" ry="13" transform="rotate(10)"  fill="#ecc8cc" opacity="0.75"/>
+          <ellipse rx="22" ry="13" transform="rotate(70)"  fill="#dca8b0" opacity="0.65"/>
+          <circle r="5" fill="#c08890" opacity="0.9"/>
+        </g>
+        <g class="floral-group bud-right" transform="translate(740,215)">
+          <ellipse rx="22" ry="13" transform="rotate(-10)" fill="#ecc8dc" opacity="0.75"/>
+          <ellipse rx="22" ry="13" transform="rotate(50)"  fill="#dca8c4" opacity="0.65"/>
+          <circle r="5" fill="#c08898" opacity="0.9"/>
+        </g>
+        <ellipse cx="105" cy="245" rx="32" ry="10" transform="rotate(-35,105,245)" fill="#8aaa88" opacity="0.6"/>
+        <ellipse cx="220" cy="150" rx="36" ry="10" transform="rotate(-70,220,150)" fill="#7a9878" opacity="0.6"/>
+        <ellipse cx="490" cy="165" rx="30" ry="9"  transform="rotate(40,490,165)"  fill="#8aaa88" opacity="0.55"/>
+        <ellipse cx="585" cy="155" rx="34" ry="10" transform="rotate(65,585,155)"  fill="#7a9878" opacity="0.6"/>
+        <ellipse cx="700" cy="190" rx="26" ry="8"  transform="rotate(50,700,190)"  fill="#9ab898" opacity="0.5"/>
+        <circle cx="340" cy="145" r="5" fill="#f0c8cc" opacity="0.8"/>
+        <circle cx="455" cy="140" r="5" fill="#f0c8d8" opacity="0.8"/>
+        <circle cx="200" cy="270" r="6" fill="#dca4ac" opacity="0.6"/>
+        <circle cx="600" cy="265" r="6" fill="#dca4b8" opacity="0.6"/>
+        <line x1="400" y1="258" x2="310" y2="310" stroke="#8aaa88" stroke-width="1.5" opacity="0.5"/>
+        <line x1="400" y1="258" x2="490" y2="308" stroke="#8aaa88" stroke-width="1.5" opacity="0.5"/>
+      </svg>
+    </div>
+
+
+    <!-- ====================================================
+      FOOTER
+    ==================================================== -->
+    <footer class="footer">
+      <p class="footer-names">Kloug &amp; Mariam</p>
+      <p class="footer-date">October 11, 2025</p>
+      <p class="footer-note">We can't wait to celebrate with you 🌸</p>
+    </footer>
+
+  </main>
+  <!-- END INVITATION -->
+
+  <script src="script.js"></script>
+</body>
+</html>

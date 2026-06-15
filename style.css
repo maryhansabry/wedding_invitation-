@@ -1,0 +1,876 @@
+/* ====================================================
+   WEDDING INVITATION — style.css
+   Kloug & Mariam · October 11
+
+   TABLE OF CONTENTS
+   1.  CSS Variables
+   2.  Reset & Base
+   3.  *** ENVELOPE SCREEN ***
+   4.  Floating Petals (envelope background)
+   5.  Hero Section
+   6.  Floral SVG Animations
+   7.  Details Cards
+   8.  Bible Verse
+   9.  Location Section
+   10. Countdown Timer
+   11. Footer
+   12. Scroll-reveal
+   13. Responsive
+==================================================== */
+
+
+/* ====================================================
+   1. CSS VARIABLES
+   Change palette here — everything derives from these
+==================================================== */
+:root {
+  --cream:       #faf6f0;
+  --cream-dark:  #f3ece0;
+  --cream-env:   #f5ede0;   /* envelope color */
+  --pink-light:  #f0d4d8;
+  --pink:        #c47a84;
+  --pink-dark:   #a85a66;
+  --sage:        #8aaa88;
+  --text-dark:   #3a2a2e;
+  --text-mid:    #6a4a50;
+  --text-light:  #9a7a80;
+  --gold:        #c8a870;
+  --cross:       #a85a66;   /* color of the cross symbol */
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Lato', Arial, sans-serif;
+  --section-gap:  4rem;
+  --max-width:    860px;
+  --card-radius:  12px;
+}
+
+
+/* ====================================================
+   2. RESET & BASE
+==================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+
+/* ====================================================
+   3. ENVELOPE SCREEN
+   Full-screen overlay shown first
+   Couple photo blurred behind, envelope centered
+==================================================== */
+.envelope-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+
+  /* Fade out after opening */
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+/* Hide envelope screen after opened */
+.envelope-screen.opened {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* --- Background: couple photo blurred --- */
+/* !! The photo that shows through = couple.jpg (uploaded photo) !! */
+.env-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  /* Gentle parallax movement — JS handles this */
+  transform: scale(1.08);
+  transition: transform 0.1s linear;
+  /* The animation: background drifts slowly */
+  animation: bgDrift 20s ease-in-out infinite alternate;
+}
+
+@keyframes bgDrift {
+  from { transform: scale(1.08) translateY(0px);   }
+  to   { transform: scale(1.08) translateY(-30px); }
+}
+
+/* Semi-transparent overlay to soften the photo */
+/* !! Adjust opacity here to make photo more/less visible (0 = hidden, 1 = full) !! */
+.env-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 246, 240, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* --- Envelope wrapper --- */
+.envelope-wrap {
+  position: relative;
+  z-index: 2;
+  width: min(320px, 88vw);
+  /* 3D perspective for flap rotation */
+  perspective: 800px;
+  user-select: none;
+}
+
+/* --- The cream envelope card --- */
+.envelope-card {
+  position: relative;
+  background: var(--cream-env);
+  border-radius: 4px;
+  box-shadow:
+    0 20px 60px rgba(58, 42, 46, 0.18),
+    0 4px 16px rgba(58, 42, 46, 0.1),
+    inset 0 0 0 1px rgba(200, 168, 112, 0.25);
+  overflow: hidden; /* hides flap overflow */
+
+  /* Gentle float animation while waiting */
+  animation: envFloat 4s ease-in-out infinite;
+}
+
+@keyframes envFloat {
+  0%, 100% { transform: translateY(0px) rotate(-0.5deg); }
+  50%       { transform: translateY(-10px) rotate(0.5deg); }
+}
+
+/* Stop floating when opened */
+.envelope-screen.opening .envelope-card {
+  animation: none;
+}
+
+/* --- Flap (top part that folds open) --- */
+.envelope-flap {
+  position: relative;
+  height: 130px;
+  background: linear-gradient(160deg, #ede4d5 0%, #e8dcc8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Clip into triangle / flap shape */
+  clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%);
+
+  /* 3D fold origin at top */
+  transform-origin: top center;
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Slight shadow to look like paper */
+  box-shadow: 0 4px 12px rgba(58, 42, 46, 0.1);
+  z-index: 2;
+}
+
+/* Flap open state — rotates backward (3D fold) */
+.envelope-flap.open {
+  transform: perspective(600px) rotateX(-170deg);
+}
+
+/* --- Wax seal on flap --- */
+.wax-seal {
+  width: 90px;
+  height: 90px;
+  margin-top: -10px;
+  /* Seal pulse animation */
+  animation: sealPulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 3px 8px rgba(168, 192, 160, 0.4));
+}
+
+.wax-seal svg { width: 100%; height: 100%; }
+
+@keyframes sealPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 3px 8px rgba(168, 192, 160, 0.4)); }
+  50%       { transform: scale(1.04); filter: drop-shadow(0 5px 14px rgba(168, 192, 160, 0.6)); }
+}
+
+/* --- Envelope front content --- */
+.envelope-front {
+  padding: 1.5rem 2rem 2rem;
+  text-align: center;
+  background: var(--cream-env);
+  /* Thin diagonal lines like envelope lining */
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 18px,
+    rgba(200, 168, 112, 0.06) 18px,
+    rgba(200, 168, 112, 0.06) 19px
+  );
+}
+
+.env-to {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 0.6rem;
+}
+
+/* K & M monogram on envelope front */
+.env-monogram {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--pink-dark);
+  line-height: 1;
+}
+
+.env-monogram span {
+  color: var(--gold);
+  font-style: normal;
+  font-size: 0.7em;
+}
+
+/* "tap to open" hint */
+.env-tap {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: var(--text-light);
+  margin-top: 1rem;
+  /* Gentle blink */
+  animation: tapBlink 2.5s ease-in-out infinite;
+}
+
+@keyframes tapBlink {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
+/* --- Letter that slides up out of envelope --- */
+.envelope-letter {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 85%;
+  background: var(--cream);
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 -4px 20px rgba(58, 42, 46, 0.1);
+  padding: 1rem;
+  text-align: center;
+  z-index: 1;
+
+  /* Letter slides up after flap opens */
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: 0.5s;
+}
+
+.envelope-letter.out {
+  transform: translateX(-50%) translateY(-30%);
+}
+
+.letter-preview-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+
+/* ====================================================
+   4. FLOATING PETALS (envelope background)
+   JS generates these — they drift down slowly
+==================================================== */
+.petal-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  top: -30px;
+  border-radius: 50% 0 50% 0;
+  opacity: 0;
+  animation: petalFall linear infinite;
+}
+
+@keyframes petalFall {
+  0%   { transform: translateY(0) rotate(0deg);    opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+
+/* ====================================================
+   5. HERO SECTION
+==================================================== */
+.invitation {
+  /* Hidden until envelope opens */
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.invitation.visible {
+  opacity: 1;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding-top: 2rem;
+  overflow: hidden;
+}
+
+/* !! Couple photo watermark behind hero text !! */
+/* !! To remove: set opacity to 0 or delete this rule !! */
+.hero-photo-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  /* Very faint — just a hint */
+  opacity: 0.07;
+  /* !! Adjust opacity above: 0 = invisible, 0.15 = stronger !! */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floral-top {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto -60px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: floralsReveal 1.5s ease forwards 0.2s;
+}
+
+.floral-bottom {
+  width: 100%;
+  max-width: 900px;
+  margin: -60px auto 0;
+  transform: scaleY(-1);
+  opacity: 0;
+  animation: floralsReveal 1.5s ease forwards 0.2s;
+}
+
+.floral-svg { width: 100%; height: auto; display: block; }
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+  padding: 0 1.5rem 3rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 0.4s;
+}
+
+.names {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--pink-dark);
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 0.7s;
+}
+
+.ampersand {
+  color: var(--gold);
+  font-style: normal;
+  font-size: 0.7em;
+  margin: 0 0.2em;
+}
+
+.divider-line {
+  width: 80px;
+  height: 1px;
+  background: var(--gold);
+  margin: 1.5rem auto;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 1s;
+}
+
+.invite-phrase {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-style: italic;
+  color: var(--text-mid);
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 1.2s;
+}
+
+
+/* ====================================================
+   6. FLORAL SVG ANIMATIONS
+==================================================== */
+.center-bloom { transform-origin: 400px 210px; animation: floatCenter 6s ease-in-out infinite; }
+.left-bloom   { transform-origin: 170px 180px; animation: floatSide 7s ease-in-out infinite; animation-delay: 0.5s; }
+.right-bloom  { transform-origin: 630px 185px; animation: floatSide 7s ease-in-out infinite reverse; animation-delay: 1s; }
+.bud-left     { transform-origin: 60px 220px;  animation: floatSide 8s ease-in-out infinite; animation-delay: 1.5s; }
+.bud-right    { transform-origin: 740px 215px; animation: floatSide 8s ease-in-out infinite reverse; animation-delay: 2s; }
+
+@keyframes floatCenter {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-8px) scale(1.02); }
+}
+@keyframes floatSide {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-5px) rotate(1.5deg); }
+}
+@keyframes floralsReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ====================================================
+   7. DETAILS CARDS
+==================================================== */
+.details {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: var(--section-gap) 1.5rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.detail-card {
+  background: var(--cream-dark);
+  border: 1px solid var(--pink-light);
+  border-radius: var(--card-radius);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  flex: 1 1 200px;
+  max-width: 240px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease calc(var(--delay,0s)),
+              transform 0.6s ease calc(var(--delay,0s));
+}
+
+.detail-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(168,90,102,0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detail-icon {
+  display: block;
+  color: var(--gold);
+  font-size: 0.9rem;
+  letter-spacing: 0.3em;
+  margin-bottom: 0.75rem;
+}
+
+/* Cross icon — bigger and more prominent than the diamond ✦ */
+.detail-icon.cross {
+  font-size: 1.4rem;
+  color: var(--cross);
+  letter-spacing: 0;
+}
+
+.detail-label {
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.detail-value {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--pink-dark);
+  line-height: 1.2;
+}
+
+.detail-value.large { font-size: clamp(1.5rem, 4vw, 2rem); }
+
+.detail-sub {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+
+/* ====================================================
+   8. BIBLE VERSE
+==================================================== */
+.verse-section {
+  padding: var(--section-gap) 1.5rem;
+  text-align: center;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.verse-wrap {
+  position: relative;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+  border-top: 1px solid var(--pink-light);
+  border-bottom: 1px solid var(--pink-light);
+}
+
+.verse-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-mid);
+  line-height: 1.8;
+  margin: 0; padding: 0;
+}
+
+.verse-ref {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 1.5rem;
+  font-style: normal;
+}
+
+.quote-mark {
+  font-family: Georgia, serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--pink-light);
+  position: absolute;
+}
+.quote-mark.open  { top: 0.2rem; left: 0.5rem; }
+.quote-mark.close { bottom: -1rem; right: 0.5rem; }
+
+
+/* ====================================================
+   9. LOCATION SECTION
+   Church photo placeholder + animated pin + map button
+==================================================== */
+.location-section {
+  text-align: center;
+  padding: var(--section-gap) 1.5rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.location-label {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+/* --- Location section titles --- */
+.location-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--pink-dark);
+  margin-bottom: 0.4rem;
+}
+
+.location-section-sub {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+}
+
+/* --- Real church photo --- */
+.church-photo {
+  width: 100%;
+  max-width: 520px;
+  height: 300px;
+  object-fit: cover;
+  object-position: center 30%;  /* !! adjust this to frame the photo better: "center top", "center 20%" etc !! */
+  border-radius: var(--card-radius);
+  margin: 0 auto 1.2rem;
+  display: block;
+  box-shadow: 0 8px 40px rgba(58,42,46,0.15);
+}
+
+/* Church name under photo */
+.church-name-display {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-style: italic;
+  color: var(--text-mid);
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.church-name-sub {
+  font-size: 0.82em;
+  color: var(--text-light);
+  font-style: normal;
+}
+
+/* Date + time info row */
+.location-info-row {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--text-mid);
+  margin: 0.8rem 0 1.5rem;
+  letter-spacing: 0.03em;
+}
+
+/* Two buttons side by side */
+.location-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+/* Calendar button — outlined style */
+.calendar-btn {
+  background: transparent !important;
+  color: var(--pink-dark) !important;
+  border: 1.5px solid var(--pink-dark) !important;
+}
+
+.calendar-btn:hover {
+  background: var(--pink-light) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(168,90,102,0.15) !important;
+}
+
+/* !! Placeholder kept for reference — can delete !! */
+.church-photo-placeholder {
+  display: none;
+}
+
+/* --- Animated bouncing map pin --- */
+.map-pin-anim {
+  margin: 0 auto 1rem;
+}
+
+.map-pin-dot {
+  display: inline-block;
+  font-size: 2rem;
+  /* Bounce animation */
+  animation: pinBounce 1.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+}
+
+@keyframes pinBounce {
+  0%, 100% { transform: translateY(0); }
+  20%       { transform: translateY(-16px); }
+  40%       { transform: translateY(0); }
+  55%       { transform: translateY(-7px); }
+  70%       { transform: translateY(0); }
+}
+
+/* --- Map button --- */
+.map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  background: var(--pink-dark);
+  border: none;
+  border-radius: 50px;
+  padding: 0.85rem 2.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.map-btn:hover {
+  background: var(--pink);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(168,90,102,0.3);
+}
+
+.location-address {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-top: 1.2rem;
+  line-height: 1.6;
+}
+
+
+/* ====================================================
+   10. COUNTDOWN TIMER
+==================================================== */
+.countdown-section {
+  text-align: center;
+  padding: var(--section-gap) 1.5rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.countdown-label {
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  margin-bottom: 0.2rem;
+}
+
+/* "Until we say I do" subtitle */
+.countdown-sublabel {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-mid);
+  margin-bottom: 2rem;
+}
+
+.countdown-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.count-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.count-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 300;
+  color: var(--pink-dark);
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.count-num.tick { transform: scale(1.12); }
+
+.count-name {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-top: 0.4rem;
+}
+
+.count-sep {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3rem);
+  color: var(--gold);
+  padding-bottom: 1.2rem;
+  opacity: 0.6;
+}
+
+
+/* ====================================================
+   11. FOOTER
+==================================================== */
+.footer {
+  text-align: center;
+  padding: 2rem 1.5rem 3rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.footer-names {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--pink-dark);
+}
+
+.footer-date {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0.4rem 0 0.8rem;
+}
+
+.footer-note {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+
+/* ====================================================
+   12. SCROLL-REVEAL
+   JS adds .visible class when element enters viewport
+==================================================== */
+[data-animate="fade-up"].visible,
+.detail-card.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+
+/* ====================================================
+   13. RESPONSIVE — Mobile
+==================================================== */
+@media (max-width: 600px) {
+  .floral-top  { margin-bottom: -30px; }
+  .floral-bottom { margin-top: -30px; }
+  .details { flex-direction: column; align-items: center; }
+  .detail-card { max-width: 100%; width: 100%; }
+  .count-unit { min-width: 60px; }
+  .count-sep { padding-bottom: 0.8rem; }
+  .quote-mark { font-size: 3rem; }
+  .envelope-wrap { width: min(300px, 90vw); }
+  .church-photo-placeholder { height: 180px; }
+}
