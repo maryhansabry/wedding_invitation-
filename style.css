@@ -620,12 +620,15 @@ body {
 }
 
 /* --- Real church photo --- */
+/* !! Real photo is portrait, 896x1165 (~3:4 ratio) — sized via aspect-ratio so it's never
+      cropped or stretched. Adjust max-width below to make it bigger/smaller. !! */
 .church-photo {
   width: 100%;
-  max-width: 520px;
-  height: 300px;
+  max-width: 380px;
+  aspect-ratio: 896 / 1165;
+  height: auto;
   object-fit: cover;
-  object-position: center 30%;  /* !! adjust this to frame the photo better: "center top", "center 20%" etc !! */
+  object-position: center top;
   border-radius: var(--card-radius);
   margin: 0 auto 1.2rem;
   display: block;
@@ -873,4 +876,5 @@ body {
   .quote-mark { font-size: 3rem; }
   .envelope-wrap { width: min(300px, 90vw); }
   .church-photo-placeholder { height: 180px; }
+  .church-photo { max-width: 280px; }
 }
